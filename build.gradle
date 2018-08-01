@@ -1,0 +1,69 @@
+import com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask
+
+plugins {
+    id 'scala'
+    id 'application'
+    id 'com.palantir.docker' version '0.20.1'
+    id 'com.commercehub.gradle.plugin.avro' version '0.15.1'
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.11.8'
+
+    compile group: 'org.apache.avro', name: 'avro', version: '1.8.2'
+
+    compile group: 'org.apache.kafka', name: 'kafka-clients', version: '2.0.0'
+    compile group: 'org.apache.kafka', name: 'kafka-streams', version: '2.0.0'
+    compile group: 'io.confluent', name: 'kafka-avro-serializer', version: '5.0.0'
+    compile group: 'io.confluent', name: 'kafka-streams-avro-serde', version: '5.0.0'
+
+    compile group: 'io.circe', name: 'circe-core_2.12', version: '0.9.3'
+    compile group: 'io.circe', name: 'circe-generic_2.12', version: '0.9.3'
+    compile group: 'io.circe', name: 'circe-parser_2.12', version: '0.9.3'
+
+    // config
+    compile group: 'com.github.pureconfig', name: 'pureconfig_2.12', version: '0.9.1'
+
+    // logging
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+
+    // Use Scalatest for testing our library
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.scalatest:scalatest_2.11:3.0.5'
+
+    // Need scala-xml at test runtime
+    testRuntime 'org.scala-lang.modules:scala-xml_2.11:1.0.6'
+
+
+}
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    mavenCentral()
+    maven{
+        url = 'http://packages.confluent.io/maven/'
+    }
+}
+
+compileScala {
+    scalaCompileOptions.additionalParameters = [
+            '-Ywarn-unused-import',
+            '-Xmacro-settings:materialize-derivations'
+    ]
+}
+
+task generateAvro(type: GenerateAvroJavaTask) {
+    source = file("src/main/resources/avro")
+    outputDir = file("src/main/scala/")
+}
+
+mainClassName = 'fr.xebia.ldi.Main'
+
+docker {
+    name 'gcr.io/scalinggame/scalinggame'
+    //TODO: extract the version in a variable
+    tags '0.1.0-SNAPSHOT'
+    files tasks.distTar.outputs, 'gradle/docker/'
+    dockerfile file('gradle/docker/Dockerfile')
+}
+
