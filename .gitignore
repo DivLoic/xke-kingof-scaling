@@ -35,3 +35,4 @@ gradle-app.setting
 *.tfvars
 
 src/main/scala/.base64.sc
+/src/main/scala/fr/xebia/ldi/schema/
