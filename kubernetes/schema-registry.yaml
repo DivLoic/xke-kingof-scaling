@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: schema-registry
+  namespace: default
+  labels:
+    app: schema-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: schema-registry
+  template:
+      metadata:
+        labels:
+          app: schema-registry
+      spec:
+        containers:
+        - name: schema-registry
+          image: confluentinc/cp-schema-registry:latest
+          env:
+          - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
+            valueFrom:
+              secretKeyRef:
+                name: confluent-secrets
+                key: bootstrap-servers-url
+          - name: SCHEMA_REGISTRY_KAFKASTORE_SASL_JAAS_CONFIG
+            valueFrom:
+              secretKeyRef:
+                name: confluent-secrets
+                key: sasl-jaas-config
+          - name: SCHEMA_REGISTRY_HOST_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.uid
+          - name: SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN
+            valueFrom:
+              configMapKeyRef:
+                key: SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN
+                name: schema-registry-config
+          - name: SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS
+            valueFrom:
+              configMapKeyRef:
+                key: SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS
+                name: schema-registry-config
+          - name: SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL
+            valueFrom:
+              configMapKeyRef:
+                key: SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL
+                name: schema-registry-config
+          - name: SCHEMA_REGISTRY_KAFKASTORE_SECURITY_PROTOCOL
+            valueFrom:
+              configMapKeyRef:
+                key: SCHEMA_REGISTRY_KAFKASTORE_SECURITY_PROTOCOL
+                name: schema-registry-config
+          - name: SCHEMA_REGISTRY_KAFKASTORE_SASL_MECHANISM
+            valueFrom:
+              configMapKeyRef:
+                key: SCHEMA_REGISTRY_KAFKASTORE_SASL_MECHANISM
+                name: schema-registry-config

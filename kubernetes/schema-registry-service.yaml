@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: schema-registry-service
+  namespace: default
+  labels:
+    app: schema-registry
+spec:
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8081
+  selector:
+    app: schema-registry
+  type: LoadBalancer
+  loadBalancerIP:
