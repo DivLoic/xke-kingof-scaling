@@ -36,3 +36,7 @@ gradle-app.setting
 
 src/main/scala/.base64.sc
 /src/main/scala/fr/xebia/ldi/schema/
+kubernetes/.secrets.yaml
+/ccloud-init.sh
+/kube-init.sh
+
