@@ -1,0 +1,9 @@
+{
+  "name": "GameAction",
+  "namespace": "fr.xebia.ldi.schema",
+  "type": "record",
+  "fields" : [
+    { "name": "game", "type": "string" },
+    { "name": "machine", "type": "string" }
+  ]
+}

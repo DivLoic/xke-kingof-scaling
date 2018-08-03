@@ -1,0 +1,10 @@
+{
+  "name": "FrameBody",
+  "namespace": "fr.xebia.ldi.schema",
+  "type": "record",
+  "fields" : [
+    { "name": "approval", "type": ["null", "boolean"] },
+    { "name": "bytes", "type": { "type": "array", "items": "string" }},
+    { "name": "machine", "type": "string"}
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "name": "GameSession",
+  "namespace": "fr.xebia.ldi.schema",
+  "type": "record",
+  "fields": [{ "name":"frames", "type": "string" }]
+}

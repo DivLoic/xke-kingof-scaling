@@ -1,0 +1,10 @@
+{
+  "name": "FrameHeader",
+  "namespace": "fr.xebia.ldi.schema",
+  "type": "record",
+  "fields" : [
+    { "name": "type", "type": "string" },
+    { "name": "ts", "type": "long" },
+    { "name": "machine", "type": "string"}
+  ]
+}
