@@ -33,8 +33,6 @@ dependencies {
 
     // Need scala-xml at test runtime
     testRuntime 'org.scala-lang.modules:scala-xml_2.11:1.0.6'
-
-
 }
 
 // In this section you declare where to find the dependencies of your project
@@ -60,10 +58,10 @@ task generateAvro(type: GenerateAvroJavaTask) {
 mainClassName = 'fr.xebia.ldi.Main'
 
 docker {
-    name 'gcr.io/scalinggame/scalinggame'
+    name 'gcr.io/cloud-fighter-101/kingof-scaling'
     //TODO: extract the version in a variable
     tags '0.1.0-SNAPSHOT'
-    files tasks.distTar.outputs, 'gradle/docker/'
+    files tasks.distTar.outputs, 'docker/'
     dockerfile file('gradle/docker/Dockerfile')
 }
 
