@@ -1,0 +1,16 @@
+plugins { id 'com.palantir.docker' version '0.20.1' }
+
+apply plugin: 'com.palantir.docker'
+
+mainClassName = 'fr.xebia.ldi.stream.Main'
+
+docker {
+    tags version
+    name 'gcr.io/cloud-fighter-101/kos-streaming-app'
+    files tasks.distTar.outputs, 'docker/'
+    dockerfile file('docker/Dockerfile')
+}
+
+dependencies {
+    compile project(':kos-common')
+}
