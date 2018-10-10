@@ -39,4 +39,4 @@ src/main/scala/.base64.sc
 kubernetes/.secrets.yaml
 /ccloud-init.sh
 /kube-init.sh
-
+/note.txt

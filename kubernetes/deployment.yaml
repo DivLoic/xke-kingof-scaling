@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: producer
+  namespace: default
+  labels:
+    app: producer
+spec:
+  selector:
+    matchLabels:
+      app: producer
+  template:
+    metadata:
+      labels:
+        app: producer
+    spec:
+      containers:
+      - name: producer-app
+        image: gcr.io/cloud-fighter-101/scalinggame-producer:latest
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: confluent-secrets
+              key: api-key
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: confluent-secrets
+              key: secret-key
+        - name: KAFKA_BROKERS
+          valueFrom:
+            secretKeyRef:
+              name: confluent-secrets
+              key: bootstrap-servers
+        - name: SCHEMA_REGISTRY
+          value: http://schema-registry-service:80

@@ -13,4 +13,5 @@ docker {
 
 dependencies {
     compile project(':kos-common')
+    compile group: 'org.apache.kafka', name: 'kafka-streams', version: '2.0.0'
 }

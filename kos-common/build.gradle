@@ -1,0 +1,8 @@
+plugins { id 'com.commercehub.gradle.plugin.avro' version '0.15.1' }
+
+apply plugin: 'com.commercehub.gradle.plugin.avro'
+
+dependencies {
+
+    compile group: 'org.apache.avro', name: 'avro', version: '1.8.2'
+}

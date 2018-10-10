@@ -1,0 +1,18 @@
+plugins { id 'com.palantir.docker' version '0.20.1' }
+
+apply plugin: 'com.palantir.docker'
+
+mainClassName = 'fr.xebia.ldi.generator.Main'
+
+docker {
+    tags version
+    name 'gcr.io/cloud-fighter-101/kos-datagen-app'
+    files tasks.distTar.outputs, 'docker/'
+    dockerfile file('docker/Dockerfile')
+}
+
+dependencies {
+    compile project(':kos-common')
+    compile group: 'org.scalacheck', name: 'scalacheck_2.12', version: '1.13.5'
+    compile group: 'com.typesafe.akka', name: 'akka-stream-kafka_2.12', version: '0.22'
+}
