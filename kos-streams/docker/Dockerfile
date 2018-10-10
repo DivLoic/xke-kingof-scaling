@@ -2,14 +2,16 @@ FROM openjdk:8u181
 
 MAINTAINER Loïc DIVAD ldivad@xebia.fr
 
-RUN mkdir -p /etc/xke-kingof-scaling/ /opt/
+RUN mkdir -p /etc/kos-streams/ /opt/
 
-COPY xke-kingof-scaling.tar /tmp/
-COPY config.yaml /etc/xke-kingof-scaling/
-COPY jmx_prometheus_javaagent-0.3.1.jar /etc/xke-kingof-scaling/
+COPY kos-streams*.tar /tmp/
+COPY config.yaml /etc/kos-streams/
+COPY jmx_prometheus_javaagent-0.3.1.jar /etc/kos-streams/
 
-RUN tar -xf /tmp/xke-kingof-scaling.tar -C /opt/
+RUN tar -xf /tmp/kos-streams*.tar -C /opt/
 
-WORKDIR /opt/xke-kingof-scaling/
+RUN mv /opt/kos-streams*/ /opt/kos-streams/
 
-ENTRYPOINT [ "/opt/xke-kingof-scaling/bin/xke-kingof-scaling" ]
+WORKDIR /opt/kos-streams/
+
+ENTRYPOINT [ "/opt/kos-streams/bin/kos-streams" ]
