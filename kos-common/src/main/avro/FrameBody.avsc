@@ -1,6 +1,6 @@
 {
   "name": "FrameBody",
-  "namespace": "fr.xebia.ldi.schema",
+  "namespace": "fr.xebia.ldi.common.schema",
   "type": "record",
   "fields" : [
     { "name": "approval", "type": ["null", "boolean"] },
