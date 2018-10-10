@@ -1,28 +1,22 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: cloud-fighter-hpa
+  name: streaming-app-autoscaler
   namespace: default
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: cloud-fighter
+    name: kstreams
   minReplicas: 1
   maxReplicas: 4
   metrics:
-#  - type: External
-#    external:
-#      metricName: consumer_lag_game_frame_rs
-#      metricSelector:
-#        matchLabels:
-#          metric: records-lag
-#      targetAverageValue: 99000
+  - type: Pods
+    pods:
+      metricName: custom.googleapis.com|consumer_lag_game_frame_rs
+      targetAverageValue: 5000
   - type: Pods
     pods:
       metricName: custom.googleapis.com|consumer_lag_game_frame_rq
-#      metricSelector:
-#        matchLabels:
-#          metric: records-lag
       targetAverageValue: 5000
 

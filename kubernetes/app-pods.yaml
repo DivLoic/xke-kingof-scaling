@@ -1,22 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: cloud-fighter
+  name: kstreams
   namespace: default
   labels:
-    app: cloud-fighter
+    app: kstreams
 spec:
   selector:
     matchLabels:
-      app: cloud-fighter
+      app: kstreams
   template:
     metadata:
       labels:
-        app: cloud-fighter
+        app: kstreams
     spec:
       containers:
-      - name: streaming-app
-        image: gcr.io/cloud-fighter-101/kingof-scaling:latest
+      - name: kstreams-app
+        image: gcr.io/cloud-fighter-101/kos-streaming-app:latest
         env:
         - name: API_KEY
           valueFrom:

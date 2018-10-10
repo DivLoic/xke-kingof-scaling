@@ -8,5 +8,5 @@ metadata:
 data:
   JAVA_OPTS: "-Djava.rmi.server.hostname\\=127.0.0.1 -Djava.rmi.server.port\\=7071\
     \ -Dcom.sun.management.jmxremote\\=true -Dcom.sun.management.jmxremote.authenticate\\\
-    =false -Dcom.sun.management.jmxremote.ssl\\=false -javaagent:/etc/xke-kingof-scaling/jmx_prometheus_javaagent-0.3.1.jar\\\
-    =9001:/etc/xke-kingof-scaling/config.yaml"
+    =false -Dcom.sun.management.jmxremote.ssl\\=false -javaagent:/etc/kos-streams/jmx_prometheus_javaagent-0.3.1.jar\\\
+    =9001:/etc/kos-streams/config.yaml"

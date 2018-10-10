@@ -7,22 +7,22 @@ lowercaseOutputName: true
 lowercaseOutputLabelNames: true
 rules:
 
-  - pattern: "kafka.consumer<type=consumer-fetch-manager-metrics, client-id=(.*), topic=GAME-FRAME-RS, partition=(.*)><>(.*): (.*)"
-    labels: { client: $1, partition: $2, topic: GAME-FRAME-RS, metric: $3 }
+  - pattern: "kafka.consumer<type=consumer-fetch-manager-metrics, client-id=(.*), topic=GAME-FRAME-RS, partition=(.*)><>records-lag: (.*)"
+    labels: { client: $1, partition: $2, topic: GAME-FRAME-RS, metric: records-lag }
     name: "consumer_lag_game_frame_rs"
     type: GAUGE
 
-  - pattern: "kafka.consumer<type=consumer-fetch-manager-metrics, client-id=(.*), topic=GAME-FRAME-RQ, partition=(.*)><>(.*): (.*)"
-    labels: { client: $1, partition: $2, topic: GAME-FRAME-RQ, metric: $3 }
+  - pattern: "kafka.consumer<type=consumer-fetch-manager-metrics, client-id=(.*), topic=GAME-FRAME-RQ, partition=(.*)><>records-lag: (.*)"
+    labels: { client: $1, partition: $2, topic: GAME-FRAME-RQ, metric: records-lag }
     name: "consumer_lag_game_frame_rq"
     type: GAUGE
 
-  - pattern: "kafka.consumer<type=consumer-fetch-manager-metrics, client-id=(.*), topic=GAME-FRAME-RS, partition=(.*)><>(.*): (.*)"
-    labels: { client: $1, partition: $2, topic: GAME-FRAME-RS, metric: $3 }
+  - pattern: "kafka.consumer<type=consumer-fetch-manager-metrics, client-id=(.*), topic=GAME-FRAME-RS, partition=(.*)><>records-lead: (.*)"
+    labels: { client: $1, partition: $2, topic: GAME-FRAME-RS, metric: records-lead }
     name: "consumer_lead_game_frame_rs"
     type: GAUGE
 
-  - pattern: "kafka.consumer<type=consumer-fetch-manager-metrics, client-id=(.*), topic=GAME-FRAME-RQ, partition=(.*)><>(.*): (.*)"
-    labels: { client: $1, partition: $2, topic: GAME-FRAME-RQ, metric: $3 }
+  - pattern: "kafka.consumer<type=consumer-fetch-manager-metrics, client-id=(.*), topic=GAME-FRAME-RQ, partition=(.*)><>records-lead: (.*)"
+    labels: { client: $1, partition: $2, topic: GAME-FRAME-RQ, metric: records-lead }
     name: "consumer_lead_game_frame_rq"
     type: GAUGE

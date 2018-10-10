@@ -1,22 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: producer
+  name: datagen
   namespace: default
   labels:
-    app: producer
+    app: datagen
 spec:
   selector:
     matchLabels:
-      app: producer
+      app: datagen
   template:
     metadata:
       labels:
-        app: producer
+        app: datagen
     spec:
       containers:
-      - name: producer-app
-        image: gcr.io/cloud-fighter-101/scalinggame-producer:latest
+      - name: datagen-app
+        image: gcr.io/cloud-fighter-101/kos-datagen-app:latest
         env:
         - name: API_KEY
           valueFrom:
