@@ -3,6 +3,4 @@ package fr.xebia.ldi.stream.config
 /**
   * Created by loicmdivad.
   */
-class TopicsConfig {
-
-}
+case class TopicsConfig(request: String, response: String)

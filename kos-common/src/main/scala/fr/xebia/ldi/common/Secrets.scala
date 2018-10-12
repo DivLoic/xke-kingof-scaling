@@ -8,7 +8,7 @@ import org.apache.commons.compress.utils.Charsets
 /**
   * Created by loicmdivad.
   */
-object Base64 extends App {
+object Secrets extends App {
 
   val pubkey = System.getenv("API_KEY")
   val secretkey = System.getenv("SECRET_KEY")
@@ -18,7 +18,7 @@ object Base64 extends App {
   val plainmodule = "org.apache.kafka.common.security.plain.PlainLoginModule"
   val jassconf = s"$plainmodule required username='$pubkey' password='$secretkey';"
 
-  def base64(s: String) = Base64.base64(s)
+  def base64(s: String) = Base64.getEncoder.encodeToString(s.getBytes(Charsets.UTF_8))
 
   val content =
     s"""

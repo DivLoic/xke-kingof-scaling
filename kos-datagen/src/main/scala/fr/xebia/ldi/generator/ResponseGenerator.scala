@@ -1,11 +1,10 @@
-package fr.xebia.ldi.asg.generator
+package fr.xebia.ldi.generator
 
 import java.time.Instant
 
 import akka.actor.{Actor, ActorRef}
 import akka.kafka.ProducerMessage
 import fr.xebia.ldi.common.schema.{FrameBody, FrameHeader}
-import fr.xebia.ldi.common.schema.FrameHeader
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.scalacheck.Gen
 

@@ -93,17 +93,31 @@ object Main extends App {
 
   def kafkaStreamProps(config: StreamingAppConfig): Properties = {
     val properties = new Properties()
-    Map(
 
+    Map(
       StreamsConfig.BOOTSTRAP_SERVERS_CONFIG -> config.cloud.map(_.bootstrapServers).getOrElse("localhost:9092"),
-      StreamsConfig.APPLICATION_ID_CONFIG -> config.appId,
       StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG -> classOf[GenericAvroSerde],
       StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG -> classOf[GenericAvroSerde],
+      StreamsConfig.APPLICATION_ID_CONFIG -> config.appId,
+      "schema.registry.url" -> config.schemaRegistryUrl,
       StreamsConfig.COMMIT_INTERVAL_MS_CONFIG -> "100",
       StreamsConfig.REPLICATION_FACTOR_CONFIG -> "1",
-      "schema.registry.url" -> config.schemaRegistryUrl
+      StreamsConfig.NUM_STREAM_THREADS_CONFIG -> "1",
+      StreamsConfig.REPLICATION_FACTOR_CONFIG -> "3",
 
     ).foreach(kv => properties.put(kv._1, kv._2))
+
+    config.cloud.foreach { cc =>
+      Map(
+        "sasl.mechanism" -> cc.saslMechanism,
+        "request.timeout.ms" -> cc.requestTimeoutMs.toString,
+        "retry.backoff.ms" -> cc.retryBackoffMs.toString,
+        "sasl.jaas.config" -> cc.saslJaasConfig,
+        "security.protocol" -> cc.securityProtocol,
+        "ssl.endpoint.identification.algorithm" -> cc.sslEndpointIdentificationAlgorithm
+      ).foreach(kv => properties.put(kv._1, kv._2))
+    }
+
     properties
   }
 

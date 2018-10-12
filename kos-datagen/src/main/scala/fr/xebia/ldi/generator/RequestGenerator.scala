@@ -1,11 +1,10 @@
-package fr.xebia.ldi.asg.generator
+package fr.xebia.ldi.generator
 
 import java.time.Instant
 
 import akka.actor.{Actor, ActorRef}
 import akka.kafka.ProducerMessage
 import fr.xebia.ldi.common.schema.{FrameBody, FrameHeader}
-import fr.xebia.ldi.common.schema.FrameHeader
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.scalacheck.Gen
 import org.slf4j.LoggerFactory
@@ -33,8 +32,8 @@ class RequestGenerator(responseGen: ActorRef, publisher: ActorRef)(implicit disp
 
   override def receive: Receive = {
     case _ =>
-      val dt = Gen.choose(1, 3).sample.get
-      context.system.scheduler.scheduleOnce(dt seconds, self, generate())
+      val dt = Gen.choose(0.1, 0.3).sample.get
+      context.system.scheduler.scheduleOnce(dt nanoseconds, self, generate())
   }
 
   def generate(): Unit = {
