@@ -17,7 +17,7 @@ allprojects {
 
         compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
-        testCompile 'org.scalatest:scalatest_2.12:3.2.0'
+        testCompile group: 'org.scalatest', name: 'scalatest_2.12', version: '3.0.5'
     }
 
     repositories {
@@ -27,6 +27,7 @@ allprojects {
 
     compileScala {
         scalaCompileOptions.additionalParameters = [
+                '-language:postfixOps',
                 '-Ywarn-unused-import',
                 '-Xmacro-settings:materialize-derivations'
         ]
