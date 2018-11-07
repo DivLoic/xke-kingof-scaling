@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Key",
+    "namespace": "fr.xebia.ldi.common.schema",
+    "type": "enum",
+    "symbols": ["X", "O"]
+  },
+  {
+  "name": "Hit",
+  "namespace": "fr.xebia.ldi.common.schema",
+  "type": "record",
+  "fields": [
+    { "name": "impact", "type": "int"},
+    { "name": "key", "type": "fr.xebia.ldi.common.schema.Key"},
+    { "name": "doubleKey", "type": [ "null", "fr.xebia.ldi.common.schema.Key"]},
+    { "name": "direction", "type": { "type": "enum", "name": "Direction", "symbols" : ["UP", "DOWN", "RIGHT", "LEFT"]}},
+    { "name": "impactType", "type": { "type": "enum", "name": "ImpactType", "symbols" : ["Fatal", "Critical", "Special", "Direct", "Missed"]}},
+    { "name": "level", "type": { "type": "enum", "name": "Level", "symbols" : ["Pro", "Inter", "NewBie"]}},
+    { "name": "game", "type": { "type": "enum", "name": "Game", "symbols" : ["Neowave", "NeoBlood", "HowlingBlood", "MaximumImpact", "HeatofBattleFromParadise"]}}
+  ]
+}]

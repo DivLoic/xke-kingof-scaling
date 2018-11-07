@@ -2,5 +2,5 @@
   "name": "GameSession",
   "namespace": "fr.xebia.ldi.common.schema",
   "type": "record",
-  "fields": [{ "name":"frames", "type": "string" }]
+  "fields": [{ "name":"hits", "type": { "type": "array", "items": "fr.xebia.ldi.common.schema.Hit" }}]
 }

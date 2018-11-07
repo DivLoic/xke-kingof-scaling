@@ -3,8 +3,8 @@
   "namespace": "fr.xebia.ldi.common.schema",
   "type": "record",
   "fields" : [
-    { "name": "type", "type": "string" },
     { "name": "ts", "type": "long" },
-    { "name": "machine", "type": "string"}
+    { "name": "machine", "type": "string"},
+    { "name": "zone", "type": { "type": "enum", "name": "Zone", "symbols": ["EU", "US", "ZG", "AU"] }}
   ]
 }

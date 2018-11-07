@@ -4,7 +4,6 @@
   "type": "record",
   "fields" : [
     { "name": "approval", "type": ["null", "boolean"] },
-    { "name": "bytes", "type": { "type": "array", "items": "string" }},
-    { "name": "machine", "type": "string"}
+    { "name": "bytes", "type": { "type": "array", "items": "string" }}
   ]
 }
