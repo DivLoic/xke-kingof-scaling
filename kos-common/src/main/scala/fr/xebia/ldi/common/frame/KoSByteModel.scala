@@ -8,20 +8,19 @@ import scodec.codecs._
 /**
   * Created by loicmdivad.
   */
-case class ByteIndex(byte: Byte) extends AnyVal
+case class KoSByteModel(byte: Byte) extends AnyVal
 
 
-object ByteIndex {
+object KoSByteModel {
 
-  implicit val codec: Codec[ByteIndex] = new Codec[ByteIndex] {
+  implicit val kosByteCodec: Codec[KoSByteModel] = new Codec[KoSByteModel] {
 
-    override def encode(value: ByteIndex): Attempt[BitVector] = byte.encode(value.byte)
+    override def encode(value: KoSByteModel): Attempt[BitVector] = byte.encode(value.byte)
 
-    override def sizeBound: SizeBound = ???
+    override def sizeBound: SizeBound = byte.sizeBound
 
-    override def decode(bits: BitVector): Attempt[DecodeResult[ByteIndex]] = byte.decode(bits).map { result =>
-      result.map(ByteIndex(_))
+    override def decode(bits: BitVector): Attempt[DecodeResult[KoSByteModel]] = byte.decode(bits).map { result =>
+      result.map(KoSByteModel(_))
     }
   }
-
 }

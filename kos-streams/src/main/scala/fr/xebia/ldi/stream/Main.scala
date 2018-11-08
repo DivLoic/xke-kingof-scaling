@@ -2,17 +2,16 @@ package fr.xebia.ldi.stream
 
 import java.util.Properties
 
-import fr.xebia.ldi.common.schema.{FrameBody, FrameHeader, GameAction, GameSession}
+import fr.xebia.ldi.common.schema.{FrameBody, FrameHeader, GameAction, GameSession, Hit => JHit}
 import fr.xebia.ldi.stream.config.StreamingAppConfig.StreamingAppConfig
-import io.confluent.kafka.streams.serdes.avro.GenericAvroSerde
+import fr.xebia.ldi.stream.operator.{StateFull, StateLess}
+import io.confluent.kafka.streams.serdes.avro.{GenericAvroSerde, SpecificAvroSerde}
 import org.apache.kafka.streams.kstream._
 import org.apache.kafka.streams.{KafkaStreams, StreamsBuilder, StreamsConfig}
 import org.apache.log4j.Logger
 
-import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
-import scala.concurrent.duration._
-
 import scala.collection.JavaConverters._
+
 
 /**
   * Created by loicmdivad.
@@ -21,14 +20,14 @@ object Main extends App {
 
   val logger = Logger.getLogger(getClass)
 
-  import fr.xebia.ldi.stream.config.ConfluentConfig._
+  import fr.xebia.ldi.stream.config.ConfluentConfig.confluentConfigReader
 
   pureconfig.loadConfig[StreamingAppConfig]("streams") match {
 
-    case Left(failures) =>
+    case scala.Left(failures) =>
       failures.toList.foreach(failure => logger.error(failure.description))
 
-    case Right(config) => {
+    case scala.Right(config) =>
 
       val serdeProp = schemaRegistryProps(config).asJava
 
@@ -44,6 +43,9 @@ object Main extends App {
       val sessionSerde = new SpecificAvroSerde[GameSession]
       sessionSerde.configure(serdeProp, false)
 
+      val hitSerde = new SpecificAvroSerde[JHit]
+      hitSerde.configure(serdeProp, false)
+
       val builder = new StreamsBuilder
 
       val requests: KStream[FrameHeader, FrameBody] =
@@ -52,40 +54,27 @@ object Main extends App {
       val responses: KStream[FrameHeader, FrameBody] =
         builder.stream(config.topics.response, Consumed.`with`(headerSerde, bodySerde))
 
-      val valuejoiner: ValueJoiner[FrameBody, FrameBody, GameAction] =
-        (rqBody: FrameBody, rsBody: FrameBody) => new GameAction("Game", rqBody.getMachine)
-
-      val correlated = requests.join[FrameBody, GameAction](
+      val correlated: KStream[FrameHeader, FrameBody] = requests.join[FrameBody, FrameBody](
         responses,
-        valuejoiner,
-        JoinWindows.of(1.second.toMillis),
+        StateFull.reqResponseJoiner,
+        JoinWindows.of(StateFull.joinWindowSize toMillis),
         Joined.`with`(headerSerde, bodySerde, bodySerde)
       )
 
-      val Array(type1, type2, type3) =  correlated.branch(
-        (key: FrameHeader, _: GameAction) => key.getType == "T01",
-        (key: FrameHeader, _: GameAction) => key.getType == "T02",
-        (key: FrameHeader, _: GameAction) => key.getType == "T03"
-      )
+      val flattenCorrelated: KStream[FrameHeader, JHit] = correlated.flatMapValues(StateLess.flatMapDecoder)
 
-      val sessionInit: Initializer[GameSession] = () => new GameSession("")
-
-      val sessionAggregator: Aggregator[FrameHeader, GameAction, GameSession] =
-        (key: FrameHeader, value: GameAction, aggregate: GameSession) =>
-          new GameSession(s"${aggregate.getFrames}#${value.getMachine}")
-
-      val sessions: KTable[FrameHeader, GameSession] = type1.groupByKey.aggregate(
-        sessionInit,
-        sessionAggregator,
+      val sessions: KTable[FrameHeader, GameSession] = flattenCorrelated.groupByKey.aggregate(
+        StateFull.sessionInitializer,
+        StateFull.sessionAggregator,
         Materialized.`with`(headerSerde, sessionSerde)
       )
 
-      sessions.toStream.to("SESSIONS", Produced.`with`(headerSerde, sessionSerde))
+      sessions.toStream.to(config.topics.output, Produced.`with`(headerSerde, sessionSerde))
 
       val kafkaStreams = new KafkaStreams(builder.build, kafkaStreamProps(config))
 
       kafkaStreams.start()
-    }
+
   }
 
   def schemaRegistryProps(config: StreamingAppConfig) =
@@ -99,16 +88,16 @@ object Main extends App {
       StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG -> classOf[GenericAvroSerde],
       StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG -> classOf[GenericAvroSerde],
       StreamsConfig.APPLICATION_ID_CONFIG -> config.appId,
-      "schema.registry.url" -> config.schemaRegistryUrl,
       StreamsConfig.COMMIT_INTERVAL_MS_CONFIG -> "100",
       StreamsConfig.REPLICATION_FACTOR_CONFIG -> "1",
       StreamsConfig.NUM_STREAM_THREADS_CONFIG -> "1",
-      StreamsConfig.REPLICATION_FACTOR_CONFIG -> "3",
+      "schema.registry.url" -> config.schemaRegistryUrl,
 
     ).foreach(kv => properties.put(kv._1, kv._2))
 
     config.cloud.foreach { cc =>
       Map(
+        StreamsConfig.REPLICATION_FACTOR_CONFIG -> "3",
         "sasl.mechanism" -> cc.saslMechanism,
         "request.timeout.ms" -> cc.requestTimeoutMs.toString,
         "retry.backoff.ms" -> cc.retryBackoffMs.toString,
@@ -117,9 +106,6 @@ object Main extends App {
         "ssl.endpoint.identification.algorithm" -> cc.sslEndpointIdentificationAlgorithm
       ).foreach(kv => properties.put(kv._1, kv._2))
     }
-
     properties
   }
-
-
 }
