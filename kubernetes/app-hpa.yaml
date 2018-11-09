@@ -14,9 +14,9 @@ spec:
   - type: Pods
     pods:
       metricName: custom.googleapis.com|consumer_lag_game_frame_rs
-      targetAverageValue: 5000
+      targetAverageValue: 100000
   - type: Pods
     pods:
       metricName: custom.googleapis.com|consumer_lag_game_frame_rq
-      targetAverageValue: 5000
+      targetAverageValue: 100000
 

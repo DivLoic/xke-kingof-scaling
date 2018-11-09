@@ -1,2 +1,2 @@
-# xke-kingof-scaling
+xke-kingof-scaling
 ---------
