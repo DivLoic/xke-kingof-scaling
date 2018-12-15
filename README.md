@@ -1,7 +1,7 @@
 xke-kingof-scaling
 ---------
-This project present a usage of the customs metrics API from Kubernetes to apply autoscaling to kafka-streams apps based
-on the consumer lag information. 
+This project present a usage of the customs metrics API from [Kubernetes](https://kubernetes.io/) to apply autoscaling 
+with [Kafka-Streams](https://kafka.apache.org/documentation/streams/) apps based on the consumer lag information. 
 
 1. [About](#about)
 2. [Requirement](#requirement)
@@ -13,28 +13,30 @@ on the consumer lag information.
  
 ## [About](#about)
 The project is an experiment from the talk: Scale in and out with kafka-streams on kubenetes. It was first given at the
-2018 edition of the Xebicon, the Xebia France Conference.
+2018 edition of [Xebicon](https://xebicon.fr), the Xebia-France Conference. 
+[Slides](https://speakerdeck.com/loicdivad/scale-out-with-kafka-streams-and-kubernetes) and 
+[Video](https://www.youtube.com/watch?v=gf1PJ7SJ55s) (FR) are available.
 
 ## [Requirement](#requirement)
-In order to run the experiment and enjoy the power of autoscaling on custom metrics a few 
-- [ ] JDK 8
-- [ ] Gradle
-- [ ] Docker
-- [ ] Kubctl
-- [ ] Terraform
-- [ ] a Google Cloud account
-- [ ] a Confluent Cloud account
+In order to use this project and enjoy the power of autoscaling on custom metrics a few tools are necessary:
+- [ ] JDK 8 [==>]()
+- [ ] Gradle [==>]()
+- [ ] Docker [==>]()
+- [ ] Kubctl [==>]()
+- [ ] Terraform [==>]()
+- [ ] a Google Cloud account [==>]()
+- [ ] a Confluent Cloud account [==>]()
 
 ## [Modules](#modules)
 
 ### datagen
-`kos-datagen` is a generator of events. It creates un actors system where actors publish events directly to kafka with 
-[akka-stream-kafka](...). The all point of scaling out our deployment is to keep up with an intensive flow. 
-So we will poduce a lot of events in a minimum of time.
+`kos-datagen` is a generator of events. It creates an actors system where actors publish events directly to kafka with 
+[akka-stream-kafka](https://doc.akka.io/docs/akka-stream-kafka/current/home.html). The all point of scaling out our 
+deployment is to keep up with an intensive flow. So we will produce a lot of events in a minimum of time.
 
 ### streams
-`kow-streams` is the streaing application. It reads events from two input topics, join them, decode 
-hexadecimal to plain scala object and aggregate theme. (...) Here is one of the latest verison of the topology: 
+`kow-streams` is the streaming application. It reads events from two input topics, join them, decode 
+hexadecimal to plain scala object and aggregate theme. Here is one of the latest verison of the topology: 
 ```
 Topologies:
    Sub-topology: 0
