@@ -1,5 +1,5 @@
-xke-kingof-scaling
----------
+# xke-kingof-scaling
+
 This project present a usage of the customs metrics API from [Kubernetes](https://kubernetes.io/) to apply autoscaling 
 with [Kafka-Streams](https://kafka.apache.org/documentation/streams/) apps based on the consumer lag information. 
 
@@ -31,8 +31,8 @@ In order to use this project and enjoy the power of autoscaling on custom metric
 
 ### datagen
 `kos-datagen` is a generator of events. It creates an actors system where actors publish events directly to kafka with 
-[akka-stream-kafka](https://doc.akka.io/docs/akka-stream-kafka/current/home.html). The all point of scaling out our 
-deployment is to keep up with an intensive flow. So we will produce a lot of events in a minimum of time.
+[akka-stream-kafka](https://doc.akka.io/docs/akka-stream-kafka/current/home.html). We want to scaling out our deployment
+to keep up with an intensive flow. So we will produce a lot of events in a minimum of time period.
 
 ### streams
 `kow-streams` is the streaming application. It reads events from two input topics, join them, decode 
@@ -52,9 +52,9 @@ Topologies:
     Processor: KTABLE-TOSTREAM-0000000010 (stores: []) --> KSTREAM-SINK-0000000011 <-- KSTREAM-AGGREGATE-0000000009
     Sink: KSTREAM-SINK-0000000011 (topic: SESSIONS) <-- KTABLE-TOSTREAM-0000000010
 ``` 
-The JMX metrics are exported via [jmx-export]() in a prometheus format. On the [
-config.yaml](./kos-streams/docker/config.yaml) we focus on the lag metric corresponding to each partions of the two 
-input topics. Note that the type `GAUGE` is required for the 
+The JMX metrics are exported via [jmx-export](https://github.com/prometheus/jmx_exporter) in a prometheus format. 
+On the [config.yaml](./kos-streams/docker/config.yaml) we focus on the lag metric corresponding to each partitions of 
+the two input topics:
 
 ```yaml
   - pattern: "kafka.consumer<type=consumer-fetch-manager-metrics, client-id=(.*), topic=GAME-FRAME-RS, partition=(.*)><>records-lag: (.*)"
@@ -62,10 +62,26 @@ input topics. Note that the type `GAUGE` is required for the
     name: "consumer_lag_game_frame_rs"
     type: GAUGE
 ```
+_Note: the type `GAUGE` is required for the rest of the experiment_
 
 ### common
 
 ## [Setup](#setup)
+
+#### GCP 
+First and foremost, to deploy anything we will need a k8s cluster.
+[Create a service account keys](https://cloud.google.com/iam/docs/creating-managing-service-account-keys) 
+for your project. Rename the key to `gcp-credentials.json`. Move the key to `.terraform`. The following command should
+start a dry-run of your Kubernetes cluster with GCP.
+
+```sell
+terraformm plan
+```
+_Note: GKE version 1.11 integrate the notion of custom metrics_
+
+#### CClouc
+ 
+
 
 ## [Usage](#usage)
 
