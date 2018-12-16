@@ -12,20 +12,20 @@ with [Kafka-Streams](https://kafka.apache.org/documentation/streams/) apps based
 7. [Backlog](#backlog)
  
 ## [About](#about)
-The project is an experiment from the talk: Scale in and out with kafka-streams on kubenetes. It was first given at the
+The project is an example from the talk: _Scale in and out with kafka-streams on kubenetes_. It was first given at the
 2018 edition of [Xebicon](https://xebicon.fr), the Xebia-France Conference. 
 [Slides](https://speakerdeck.com/loicdivad/scale-out-with-kafka-streams-and-kubernetes) and 
 [Video](https://www.youtube.com/watch?v=gf1PJ7SJ55s) (FR) are available.
 
 ## [Requirement](#requirement)
 In order to use this project and enjoy the power of autoscaling on custom metrics a few tools are necessary:
-- [ ] JDK 8 [==>]()
-- [ ] Gradle [==>]()
-- [ ] Docker [==>]()
-- [ ] Kubctl [==>]()
-- [ ] Terraform [==>]()
-- [ ] a Google Cloud account [==>]()
-- [ ] a Confluent Cloud account [==>]()
+- [ ] JDK 8 [:arrow_down: installation page](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- [ ] Gradle [:arrow_down: installation page](https://gradle.org/install/)
+- [ ] Docker [:arrow_down: installation page](https://docs.docker.com/install/)
+- [ ] Kubctl [:arrow_down: installation page](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [ ] Terraform [:arrow_down: installation page](https://www.terraform.io/downloads.html)
+- [ ] a Google Cloud account [:credit_card: login page](https://cloud.google.com/)
+- [ ] a Confluent Cloud account [:credit_card: login page](https://confluent.cloud/login)
 
 ## [Modules](#modules)
 
@@ -35,7 +35,7 @@ In order to use this project and enjoy the power of autoscaling on custom metric
 to keep up with an intensive flow. So we will produce a lot of events in a minimum of time period.
 
 ### streams
-`kow-streams` is the streaming application. It reads events from two input topics, join them, decode 
+`kos-streams` is the streaming application. It reads events from two input topics, join them, decode 
 hexadecimal to plain scala object and aggregate theme. Here is one of the latest verison of the topology: 
 ```
 Topologies:
@@ -65,6 +65,23 @@ the two input topics:
 _Note: the type `GAUGE` is required for the rest of the experiment_
 
 ### common
+`kow-common` is library imported the the two first modules. It contains the encoding use by the actors to send frames
+in each event. And it contains the avro schema of the decoded frame create by the streaming app.
+
+```scala
+// -- decode a event
+
+val frame = "c3ff8d4f14ffc3d9b5" // frame: String = c3ff8d4f14ffc3d9b5
+
+Hit.decode(frame) // res0: Option[scodec.DecodeResult[fr.xebia.ldi.common.frame.Hit]] = 
+                // Some(DecodeResult(Hit(O(),Some(Left()),Critical(20),Some(O()),NewBie(),NeoBlood()),BitVector(empty)))
+
+// -- encode a event
+
+val event = Hit(key = O(), direction = None, impact = Direct(10), doubleKey = None, level = NewBie(), game = Neowave())
+
+Codec.encode(event) // res1: scodec.Attempt[scodec.bits.BitVector] = Successful(BitVector(56 bits, 0xc300b10a00d9a5))
+```
 
 ## [Setup](#setup)
 
@@ -79,8 +96,8 @@ terraformm plan
 ```
 _Note: GKE version 1.11 integrate the notion of custom metrics_
 
-#### CClouc
- 
+#### CCloud
+
 
 
 ## [Usage](#usage)
