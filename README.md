@@ -3,14 +3,14 @@
 This project present a usage of the customs metrics API from [Kubernetes](https://kubernetes.io/) to apply autoscaling 
 with [Kafka-Streams](https://kafka.apache.org/documentation/streams/) apps based on the consumer lag information. 
 
-1. [About](#about)
-2. [Requirement](#requirement)
-3. [Modules](#modules)
-4. [Setup](#setup)
-5. [Usage](#usage)
-6. [Result](#result)
-7. [Backlog](#backlog)
- 
+<center>  
+
+|About  | Requirement  | Modules  | Setup  | Usage  | Result  | Backlog  |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|[->](#about)  |[->](#requirement)   |[->](#modules)   |[->](#setup)  |[->](#usage)   |[->](#result) |[->](#backlog)|  
+
+</center>  
+
 ## [About](#about)
 The project is an example from the talk: _Scale in and out with kafka-streams on kubenetes_. It was first given at the
 2018 edition of [Xebicon](https://xebicon.fr), the Xebia-France Conference. 
@@ -19,13 +19,13 @@ The project is an example from the talk: _Scale in and out with kafka-streams on
 
 ## [Requirement](#requirement)
 In order to use this project and enjoy the power of autoscaling on custom metrics a few tools are necessary:
-- [ ] JDK 8 [:arrow_down: installation page](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-- [ ] Gradle [:arrow_down: installation page](https://gradle.org/install/)
-- [ ] Docker [:arrow_down: installation page](https://docs.docker.com/install/)
-- [ ] Kubctl [:arrow_down: installation page](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-- [ ] Terraform [:arrow_down: installation page](https://www.terraform.io/downloads.html)
-- [ ] a Google Cloud account [:credit_card: login page](https://cloud.google.com/)
-- [ ] a Confluent Cloud account [:credit_card: login page](https://confluent.cloud/login)
+- JDK 8 [:arrow_down: installation page](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- Gradle [:arrow_down: installation page](https://gradle.org/install/)
+- Docker [:arrow_down: installation page](https://docs.docker.com/install/)
+- Kubctl [:arrow_down: installation page](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- Terraform [:arrow_down: installation page](https://www.terraform.io/downloads.html)
+- a Google Cloud account [:credit_card: login page](https://cloud.google.com/)
+- a Confluent Cloud account [:credit_card: login page](https://confluent.cloud/login)
 
 ## [Modules](#modules)
 
@@ -65,22 +65,27 @@ the two input topics:
 _Note: the type `GAUGE` is required for the rest of the experiment_
 
 ### common
-`kow-common` is library imported the the two first modules. It contains the encoding use by the actors to send frames
+`kow-common` is library imported the two first modules. It contains the encoding use by the actors to send frames
 in each event. And it contains the avro schema of the decoded frame create by the streaming app.
 
 ```scala
-// -- decode a event
-
-val frame = "c3ff8d4f14ffc3d9b5" // frame: String = c3ff8d4f14ffc3d9b5
-
-Hit.decode(frame) // res0: Option[scodec.DecodeResult[fr.xebia.ldi.common.frame.Hit]] = 
-// Some(DecodeResult(Hit(O(),Some(Left()),Critical(20),Some(O()),NewBie(),NeoBlood()),BitVector(empty)))
-
 // -- encode a event
 
-val event = Hit(key = O(), direction = None, impact = Direct(10), doubleKey = None, level = NewBie(), game = Neowave())
+val event = Hit(key = O(), direction = None, impact = Critical(42), level = NewBie(), game = Neowave())
 
-Codec.encode(event) // res1: scodec.Attempt[scodec.bits.BitVector] = Successful(BitVector(56 bits, 0xc300b10a00d9a5))
+Codec.encode(event) // res1: Attempt[scodec.bits.BitVector] = Successful(BitVector(56 bits, 0xc3004f2a00d9a5))
+
+// -- decode a event
+
+val frame = "c3004f2a00d9a5" // frame: String = c3004f2a00d9a5
+
+Hit.decode(frame) // res0: Option[scodec.DecodeResult[fr.xebia.ldi.common.frame.Hit]] = 
+// Some(DecodeResult(Hit(O(),None,Critical(42),None,NewBie(),Neowave()),BitVector(empty)))
+
+// -- convert a event
+
+val message = event.asJava // message: fr.xebia.ldi.common.schema.Hit = 
+// {"impact": 42, "key": "O", "direction": null, "impactType": "Critical", "level": "NewBie", "game": "Neowave"}
 ```
 
 ## [Setup](#setup)
@@ -98,8 +103,6 @@ _Note: GKE version 1.11 integrate the notion of custom metrics_
 
 #### CCloud
 
-
-
 ## [Usage](#usage)
 
 ## [Result](#result)
@@ -107,5 +110,5 @@ _Note: GKE version 1.11 integrate the notion of custom metrics_
 ## [Backlog](#backlog)
 - [ ] Add the tests case
 - [ ] Configure the throughput at run time
-- [ ]  
+
 
