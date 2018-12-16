@@ -74,7 +74,7 @@ in each event. And it contains the avro schema of the decoded frame create by th
 val frame = "c3ff8d4f14ffc3d9b5" // frame: String = c3ff8d4f14ffc3d9b5
 
 Hit.decode(frame) // res0: Option[scodec.DecodeResult[fr.xebia.ldi.common.frame.Hit]] = 
-                // Some(DecodeResult(Hit(O(),Some(Left()),Critical(20),Some(O()),NewBie(),NeoBlood()),BitVector(empty)))
+// Some(DecodeResult(Hit(O(),Some(Left()),Critical(20),Some(O()),NewBie(),NeoBlood()),BitVector(empty)))
 
 // -- encode a event
 
