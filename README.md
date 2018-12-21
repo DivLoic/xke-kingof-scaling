@@ -3,13 +3,9 @@
 This project present a usage of the customs metrics API from [Kubernetes](https://kubernetes.io/) to apply autoscaling 
 with [Kafka-Streams](https://kafka.apache.org/documentation/streams/) apps based on the consumer lag information. 
 
-<center>  
-
 |About  | Requirement  | Modules  | Setup  | Usage  | Result  | Backlog  |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|[->](#about)  |[->](#requirement)   |[->](#modules)   |[->](#setup)  |[->](#usage)   |[->](#result) |[->](#backlog)|  
-
-</center>  
+|[↓](#about)  |[↓](#requirement)   |[↓](#modules)   |[↓](#setup)  |[↓](#usage)   |[↓](#result) |[↓](#backlog)|  
 
 ## [About](#about)
 The project is an example from the talk: _Scale in and out with kafka-streams on kubenetes_. It was first given at the
@@ -102,6 +98,20 @@ terraformm plan
 _Note: GKE version 1.11 integrate the notion of custom metrics_
 
 #### CCloud
+
+#### Kubctl
+
+```shell
+gcloud container clusters get-credentials #<your-cluster-name>
+```
+
+```shell 
+kubectl config get-contexts
+```
+
+```
+kubectl create --filename ./kubernetes/.secrets.yaml
+```
 
 ## [Usage](#usage)
 
