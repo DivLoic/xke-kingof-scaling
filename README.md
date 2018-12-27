@@ -99,7 +99,7 @@ _Note: GKE version 1.11 integrate the notion of custom metrics_
 
 #### CCloud
 
-[Confluent Cloud](https:/confluent.cloud) let you create a Kafka clusters on the cloud provider of your choice.
+[Confluent Cloud](https://confluent.cloud) let you create a Kafka clusters on the cloud provider of your choice.
 During this procedure you will get a `bootstrap-servers`, a `api-key` and a `secret-key`. Run the entry point 
 `Secrets.scala` with the env variable:  
 - API_KEY=`api-key`  
