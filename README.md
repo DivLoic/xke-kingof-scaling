@@ -106,7 +106,8 @@ During this procedure you will get a `bootstrap-servers`, a `api-key` and a `sec
 - SECRET_KEY=`secret-key`  
 - BOOTSTRAP_SERVERS=`bootstrap-servers`  
 
-This will create de secret-maps with all the secrets encode in base64 in the file `./kubernetes/.secrets.yaml`.
+This will create a [secret object](https://kubernetes.io/docs/concepts/configuration/secret/) 
+encoded in base64 in the file `./kubernetes/.secrets.yaml`.
 
 #### Kubctl
 
