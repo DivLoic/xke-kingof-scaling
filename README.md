@@ -69,13 +69,13 @@ in each event. And it contains the avro schema of the decoded frame create by th
 
 val event = Hit(key = O(), direction = None, impact = Critical(42), level = NewBie(), game = Neowave())
 
-Codec.encode(event) // res1: Attempt[scodec.bits.BitVector] = Successful(BitVector(56 bits, 0xc3004f2a00d9a5))
+Codec.encode(event) // res0: Attempt[scodec.bits.BitVector] = Successful(BitVector(56 bits, 0xc3004f2a00d9a5))
 
 // -- decode a event
 
 val frame = "c3004f2a00d9a5" // frame: String = c3004f2a00d9a5
 
-Hit.decode(frame) // res0: Option[scodec.DecodeResult[fr.xebia.ldi.common.frame.Hit]] = 
+Hit.decode(frame) // res1: Option[scodec.DecodeResult[fr.xebia.ldi.common.frame.Hit]] = 
 // Some(DecodeResult(Hit(O(),None,Critical(42),None,NewBie(),Neowave()),BitVector(empty)))
 
 // -- convert a event
@@ -98,6 +98,15 @@ terraformm plan
 _Note: GKE version 1.11 integrate the notion of custom metrics_
 
 #### CCloud
+
+[Confluent Cloud](https:/confluent.cloud) let you create a Kafka clusters on the cloud provider of your choice.
+During this procedure you will get a `bootstrap-servers`, a `api-key` and a `secret-key`. Run the entry point 
+`Secrets.scala` with the env variable:  
+- API_KEY=`api-key`  
+- SECRET_KEY=`secret-key`  
+- BOOTSTRAP_SERVERS=`bootstrap-servers`  
+
+This will create de secret-maps with all the secrets encode in base64 in the file `./kubernetes/.secrets.yaml`.
 
 #### Kubctl
 
